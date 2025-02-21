@@ -1,22 +1,44 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عقارك - منصة العقارات</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
-    <header>
-        <div class="logo">عقارك</div>
-        <div class="search-bar">
-            <input type="text" placeholder="ابحث عن العقارات...">
-            <button type="button"><i class="fas fa-search"></i></button>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h1>{{ user.username }}</h1>
+        <div class="profile-stats">
+            <span class="views-count">
+                <i class="fas fa-eye"></i> {{ user.profile_views }} زيارة
+            </span>
+            {% if user.is_certified %}
+            <span class="certification-badge">
+                <i class="fas fa-certificate"></i> وسيط معتمد
+            </span>
+            {% endif %}
         </div>
-        <nav>
-            <a href="#" id="homeLink"><i class="fas fa-home"></i> الرئيسية</a>
-            <a href="#" id="loginBtn"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</a>
-            <a href="#" id="registerBtn"><i class="fas fa-user-plus"></i> تسجيل جديد</a>
-            <a href="#" id="contactBtn"><i class="fas fa-envelope"></i> اتصل بنا</a>
-            <a href="https://wa.me/0535342404" target="_blank" class="whatsapp
+    </div>
+
+    <div class="profile-details">
+        <p>نوع الحساب: {{ user.role }}</p>
+        {% if user.is_certified %}
+        <p>رقم رخصة فال: {{ user.license_number }}</p>
+        <p>تاريخ الاعتماد: {{ user.certification_date.strftime('%Y-%m-%d') }}</p>
+        {% endif %}
+        <p>تاريخ التسجيل: {{ user.created_at.strftime('%Y-%m-%d') }}</p>
+    </div>
+
+    <div class="user-properties">
+        <h2>العقارات المعروضة</h2>
+        <div class="property-grid">
+            {% for property in properties %}
+            <div class="property-card">
+                <div class="property-image" style="background-image: url('{{ property.image_urls.split(",")[0] if property.image_urls else "https://via.placeholder.com/300x150" }}');"></div>
+                <div class="property-details">
+                    <h3>{{ property.title }}</h3>
+                    <p class="price">{{ property.price }} ريال</p>
+                    <p class="location">{{ property.city }} - {{ property.district }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
