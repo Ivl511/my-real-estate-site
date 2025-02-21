@@ -1,22 +1,235 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عقارك - منصة العقارات</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>مؤسستي العقارية</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      direction: rtl;
+      background: #f9f9f9;
+    }
+    header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .whatsapp-btn {
+      background: #25D366;
+      color: #fff;
+      padding: 10px 15px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .whatsapp-btn:hover {
+      background: #1ebe5d;
+    }
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .search-box {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .search-box input {
+      width: 80%;
+      max-width: 400px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      outline: none;
+    }
+    .property-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .property-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .property-card:hover {
+      transform: translateY(-5px);
+    }
+    .property-image {
+      width: 100%;
+      height: 180px;
+      background-size: cover;
+      background-position: center;
+    }
+    .property-details {
+      padding: 15px;
+    }
+    .property-details h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      color: #2c3e50;
+    }
+    .property-details p {
+      margin: 5px 0;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #555;
+    }
+    .property-details .status {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 4px;
+      margin-top: 5px;
+      font-weight: bold;
+      color: #fff;
+    }
+    .status.available { background: #27ae60; }
+    .status.sold { background: #c0392b; }
+    .status.reserved { background: #f39c12; }
+    .property-details a.whatsapp-link {
+      display: inline-block;
+      margin-top: 10px;
+      text-decoration: none;
+      color: #25D366;
+      font-weight: bold;
+    }
+    footer {
+      background: #2c3e50;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="logo">عقارك</div>
-        <div class="search-bar">
-            <input type="text" placeholder="ابحث عن العقارات...">
-            <button type="button"><i class="fas fa-search"></i></button>
-        </div>
-        <nav>
-            <a href="#" id="homeLink"><i class="fas fa-home"></i> الرئيسية</a>
-            <a href="#" id="loginBtn"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</a>
-            <a href="#" id="registerBtn"><i class="fas fa-user-plus"></i> تسجيل جديد</a>
-            <a href="#" id="contactBtn"><i class="fas fa-envelope"></i> اتصل بنا</a>
-            <a href="https://wa.me/0535342404" target="_blank" class="whatsapp
+  <header>
+    <h1>مؤسستي العقارية</h1>
+    <div class="top-bar">
+      <!-- زر التواصل عبر الواتساب (غيّر الرقم لما يناسبك) -->
+      <a class="whatsapp-btn" href="https://wa.me/966535342404" target="_blank">تواصل عبر واتساب</a>
+    </div>
+  </header>
+  
+  <main>
+    <!-- صندوق البحث -->
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="ابحث عن عقارك..." />
+    </div>
+    
+    <!-- عرض العقارات -->
+    <div class="property-grid" id="propertyGrid">
+      <!-- يتم تعبئة بطاقات العقارات من خلال جافاسكريبت أدناه -->
+    </div>
+  </main>
+
+  <footer>
+    <p>معتمد من الهيئة العامة للعقار - رخصة رقم 123456</p>
+  </footer>
+
+  <script>
+    // مصفوفة العقارات - عدلها كما تريد
+    // كل عقار يحتوي على: {title, price, description, status, image}
+    const properties = [
+      {
+        title: "شقة فاخرة للبيع",
+        price: "800,000 ريال",
+        description: "شقة 3 غرف وصالة في موقع مميز وقريبة من الخدمات.",
+        status: "متاح",
+        image: "https://via.placeholder.com/400x300" // ضع رابط صورة العقار هنا
+      },
+      {
+        title: "فيلا راقية مع مسبح",
+        price: "2,500,000 ريال",
+        description: "فيلا بتصميم حديث مع مسبح وحديقة خاصة.",
+        status: "محجوز",
+        image: "https://via.placeholder.com/400x300"
+      },
+      {
+        title: "أرض سكنية في حي راقي",
+        price: "1,000,000 ريال",
+        description: "أرض سكنية بمساحة 500 م² في حي هادئ.",
+        status: "مباع",
+        image: "https://via.placeholder.com/400x300"
+      },
+      {
+        title: "دور علوي للإيجار",
+        price: "30,000 ريال سنوياً",
+        description: "دور علوي في فيلا يتكون من 4 غرف ومجلس.",
+        status: "متاح",
+        image: "https://via.placeholder.com/400x300"
+      }
+    ];
+
+    // دالة لعرض العقارات في الصفحة
+    function renderProperties(filterText = "") {
+      const grid = document.getElementById('propertyGrid');
+      grid.innerHTML = ""; // تنظيف المحتوى القديم
+
+      // فلترة العقارات بناءً على نص البحث
+      const filteredProperties = properties.filter(prop => {
+        // نجعل النصوص كلها صغيرة للمقارنة
+        const titleLower = prop.title.toLowerCase();
+        const descLower = prop.description.toLowerCase();
+        const filterLower = filterText.toLowerCase();
+        return titleLower.includes(filterLower) || descLower.includes(filterLower);
+      });
+
+      filteredProperties.forEach(prop => {
+        // إنشاء بطاقة العقار
+        const card = document.createElement('div');
+        card.className = "property-card";
+
+        // تحديد لون الحالة
+        let statusClass = "available";
+        if (prop.status === "مباع") statusClass = "sold";
+        else if (prop.status === "محجوز") statusClass = "reserved";
+
+        card.innerHTML = `
+          <div class="property-image" style="background-image: url('${prop.image}');"></div>
+          <div class="property-details">
+            <h3>${prop.title}</h3>
+            <p><strong>السعر:</strong> ${prop.price}</p>
+            <p>${prop.description}</p>
+            <span class="status ${statusClass}">${prop.status}</span>
+            <br>
+            <a class="whatsapp-link" href="https://wa.me/966535342404?text=أرغب في الاستفسار عن العقار: ${encodeURIComponent(prop.title)}" target="_blank">
+              تواصل عبر واتساب
+            </a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // استدعاء دالة العرض عند فتح الصفحة
+    renderProperties();
+
+    // ربط صندوق البحث بالدالة
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', () => {
+      renderProperties(searchInput.value);
+    });
+  </script>
+</body>
+</html>
